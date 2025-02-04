@@ -24,7 +24,8 @@ jobs:
 
       - name: Get commit hash
         id: get-commit-hash
-        run: echo "::set-output name=version='0.0.1'"
+        run: echo "version=$(echo '0.0.1')" >> $GITHUB_OUTPUT
+        #run: echo "::set-output name=version::'0.0.1'"
     # - name: Get timestamp
     #   id: get-timestamp
     #   run: echo "::set-output name=timestamp::$(date +'%Y-%m-%d-%H-%M')"
