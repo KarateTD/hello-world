@@ -24,7 +24,7 @@ jobs:
 
       - name: Get commit hash
         id: get-commit-hash
-        run: echo "0.0.1"
+        run: echo "::set-output name=version='0.0.1'"
     # - name: Get timestamp
     #   id: get-timestamp
     #   run: echo "::set-output name=timestamp::$(date +'%Y-%m-%d-%H-%M')"
@@ -34,7 +34,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
-          IMAGE_TAG: ${{ steps.get-commit-hash }}
+          IMAGE_TAG: ${{ steps.get-commit-hash.outputs.version }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
