@@ -47,7 +47,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: "hello-world"
+          ECR_REPOSITORY: ${{ steps.read_values.outputs.image_name }}
           IMAGE_TAG: ${{ steps.read_values.outputs.version }}
           #IMAGE_TAG: ${{ steps.get-commit-hash.outputs.version }}
         run: |
