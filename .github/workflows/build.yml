@@ -2,7 +2,9 @@ name: Push the Docker image to AWS ECR Repo
 on:
   push:
     branches:
-       - test_branch
+      - test_branch
+    tags:
+      - ''
 jobs:
   Build:
     name: Build
@@ -10,6 +12,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get install -y python3-yaml
+
+      - name: Read values.yml
+        id: read_values
+        run: |
+          python3 -c "
+          import yaml
+          with open('../values.yml','r') as file:
+          data = yaml.safe_load(file)
+          print(f'version={data['version']}') >> $GITHUB_OUTPUT
+          print(f'image_name={data['image_name']}') >> $GITHUB_OUTPUT
+          "
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -25,17 +42,14 @@ jobs:
       - name: Get commit hash
         id: get-commit-hash
         run: echo "version=$(echo '0.0.1')" >> $GITHUB_OUTPUT
-        #run: echo "::set-output name=version::'0.0.1'"
-    # - name: Get timestamp
-    #   id: get-timestamp
-    #   run: echo "::set-output name=timestamp::$(date +'%Y-%m-%d-%H-%M')"
 
       - name: Build, tag, and push the image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: "hello-world"
-          IMAGE_TAG: ${{ steps.get-commit-hash.outputs.version }}
+          IMAGE_TAG: ${{ steps.read_values.outputs.version }}
+          #IMAGE_TAG: ${{ steps.get-commit-hash.outputs.version }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

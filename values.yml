@@ -1,0 +1,3 @@
+version: "1.0.0"
+image_name: "hello-world"
+build_branch_tag: "true"
