@@ -22,11 +22,15 @@ jobs:
         run: |
           python3 -c "
           import yaml
+          import os
           with open('values.yml','r') as file:
             data = yaml.safe_load(file)
-            print(f'::set-output name=version::{data['version']}')
-            print(f'::set-output name=image_name::{data['image_name']}')
-          "
+          with open(os.environ['GITHUB_OUTPUT'],'a') as file:
+            file.write(f'version={data['version']}\n')
+            file.write(f'image_name={data['image_name']}\n')
+        #    print(f'::set-output name=version::{data['version']}')
+        #    print(f'::set-output name=image_name::{data['image_name']}')
+       #   "
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -39,17 +43,12 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Get commit hash
-        id: get-commit-hash
-        run: echo "version=$(echo '0.0.1')" >> $GITHUB_OUTPUT
-
       - name: Build, tag, and push the image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ steps.read_values.outputs.image_name }}
           IMAGE_TAG: ${{ steps.read_values.outputs.version }}
-          #IMAGE_TAG: ${{ steps.get-commit-hash.outputs.version }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
