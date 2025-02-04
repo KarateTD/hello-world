@@ -25,7 +25,7 @@ jobs:
           with open('values.yml','r') as file:
             data = yaml.safe_load(file)
             print(f'::set-output name=version::{data['version']}')
-            print(f'::set-output name=version::{data['image_name']}')
+            print(f'::set-output name=image_name::{data['image_name']}')
           "
 
       - name: Configure AWS credentials
