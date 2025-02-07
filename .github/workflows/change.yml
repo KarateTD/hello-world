@@ -107,6 +107,5 @@ jobs:
           pwd
           ls -l
           sed -i "s/tag: REPLACE_ME/tag: ${{ needs.tag-image.outputs.tag-version }}/g" values.yml
-          cat values.yml
 
 
