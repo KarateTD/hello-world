@@ -29,9 +29,6 @@ jobs:
             file.write(f'version={data['version']}\n')
             file.write(f'image_name={data['image_name']}\n')
           "
-        #    print(f'::set-output name=version::{data['version']}')
-        #    print(f'::set-output name=image_name::{data['image_name']}')
-       #   "
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
