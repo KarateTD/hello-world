@@ -67,6 +67,7 @@ jobs:
       - name: echo image name
         run: |
           echo "The image name will be: ${{ needs.build-push.outputs.image-name }}"
+          echo "The tag version will be: ${{ needs.build-push.outputs.tag-version }}"
    #    - name: Build and push image
    #       id: build
    #       uses: docker/build-push-action@v2
