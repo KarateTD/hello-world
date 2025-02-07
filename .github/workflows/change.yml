@@ -38,6 +38,10 @@ jobs:
         run: |
           echo "The next tag version will be: ${{ steps.tag-dry-run.outputs.new_tag }}"
 
+      - name: echo image name
+        run: |
+          echo "The image name will be: ${{ steps.tag-dry-run.outputs.image-name }}"
+
    #    - name: Build and push image
    #       id: build
    #       uses: docker/build-push-action@v2
