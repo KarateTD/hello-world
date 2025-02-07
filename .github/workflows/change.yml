@@ -26,7 +26,7 @@ jobs:
   build-push:
     runs-on: ubuntu-latest
     outputs:
-      image-name: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+      image-name: hello-world
       tag-version: ${{ steps.tag-dry-run.outputs.new_tag }}
 
     steps:
@@ -51,7 +51,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: 'ghcr.io/${{ github.repository }}'
+          images: '${{ github.repository }}'
           tags: |
             type=sha
 
@@ -82,14 +82,14 @@ jobs:
       - name: build and push image
         id: build-image
         env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           SOURCE: ${{needs.build-push.outputs.image-name}}
-          TARGET: ghcr.io/${{ github.repository }}:${{needs.build-push.outputs.tag-version}}
-          LATEST:  ghcr.io/${{ github.repository }}:latest
+          TARGET: ${{needs.build-push.outputs.image-name}}:${{needs.build-push.outputs.tag-version}}
+          LATEST: ${{needs.build-push.outputs.image-name}}:latest
         run: |
-          docker pull $SOURCE
-          docker tag $SOURCE $TARGET
-          docker tag $SOURCE $LATEST
-          docker push $TARGET
-          docker push $LATEST
+          docker build -t $ECR_REGISTRY/$TARGET .
+          docker push $ECR_REGISTRY/$TARGET
+          docker tag $ECR_REGISTRY/$SOURCE $ECR_REGISTRY/$LATEST
+          docker push $ECR_REGISTRY/$LATEST
           echo "::set-output name=tag-version::${{needs.build-push.outputs.tag-version}}"
 
