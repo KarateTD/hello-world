@@ -83,13 +83,12 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          SOURCE: ${{needs.build-push.outputs.image-name}}
-          TARGET: ${{needs.build-push.outputs.image-name}}:${{needs.build-push.outputs.tag-version}}
-          LATEST: ${{needs.build-push.outputs.image-name}}:latest
+          ECR_REPOSITORY: ${{ needs.build-push.outputs.image-name }}
+          TAG: ${{ needs.build-push.outputs.tag-version }}
+          LATEST: "latest"
         run: |
-          docker build -t $ECR_REGISTRY/$TARGET .
-          docker push $ECR_REGISTRY/$TARGET
-          docker tag $ECR_REGISTRY/$SOURCE $ECR_REGISTRY/$LATEST
-          docker push $ECR_REGISTRY/$LATEST
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$LATEST .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$LATEST
           echo "::set-output name=tag-version::${{needs.build-push.outputs.tag-version}}"
 
