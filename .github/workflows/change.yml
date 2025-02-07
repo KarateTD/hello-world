@@ -104,6 +104,8 @@ jobs:
 
       - name: Replace values
         run: |
+          pwd
+          ls -l
           sed -i "s/tag: REPLACE_ME/tag: ${{ needs.tag-image.outputs.tag-version }}/g" ./values.yaml
           cat ./values.yaml
 
