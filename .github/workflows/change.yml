@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: '0'
-          
+
       - name: Semver
         id: tag-dry-run
         uses: anothrNick/github-tag-action@1.70.0
@@ -78,19 +78,18 @@ jobs:
         run: |
           echo "The image name will be: ${{ needs.build-push.outputs.image-name }}"
           echo "The tag version will be: ${{ needs.build-push.outputs.tag-version }}"
-   #    - name: Build and push image
-   #       id: build
-   #       uses: docker/build-push-action@v2
-   #       with:
-   #         context: .
-   #         file: ./Dockerfile
-   #         push: true
-   #         tags: |
-   #           ${{ github.ref_name }}:latest
-   #           ${{ github.ref_name }}-${{ inputs.env }}:latest
-   #     - name: Tag image
-    #      run: |
-    #        docker tag ${{ steps.build.outputs.tags }} ${{ secrets.DOCKER_USERNAME }}/tag-release-image:${{ inputs.env }}
-     #   - name: Push image
-     #     run: |
-     #       docker push ${{ secrets.DOCKER_USERNAME }}/tag-release-image:${{ inputs.env }}
+
+      - name: build and push image
+        id: build-image
+        env:
+          SOURCE: ${{needs.build-push.outputs.image-name}}
+          TARGET: ghcr.io/${{ github.repository }}:${{needs.build-push.outputs.tag-version}}
+          LATEST:  ghcr.io/${{ github.repository }}:latest
+        run: |
+          docker pull $SOURCE
+          docker tag $SOURCE $TARGET
+          docker tag $SOURCE $LATEST
+          docker push $TARGET
+          docker push $LATEST
+          echo "::set-output name=tag-version::${{needs.build-push.outputs.tag-version}}"
+
