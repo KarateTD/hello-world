@@ -93,6 +93,8 @@ jobs:
     
   replace-value:
     needs: [tag-image]
+    runs-on: ubuntu-latest
+    name: Replace values in Values.yaml
     steps:  
       - name: Checkout
         uses: actions/checkout@v4
