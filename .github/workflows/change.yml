@@ -56,10 +56,17 @@ jobs:
         run: |
           echo "The next tag version will be: ${{ steps.tag-dry-run.outputs.new_tag }}"
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: 'ghcr.io/${{ github.repository }}'
+          tags: |
+            type=sha
+
       - name: echo image name
         run: |
-          echo "The image name will be: ${{ steps.tag-dry-run.outputs.image-name }}"
-
+          echo "The image name will be: ${{ needs.build-push.outputs.image-name }}"
    #    - name: Build and push image
    #       id: build
    #       uses: docker/build-push-action@v2
