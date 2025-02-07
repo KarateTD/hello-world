@@ -1,0 +1,56 @@
+name: tag-release-image
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment'
+        type: choice
+        options:
+          - 'dev'
+          - 'qa'
+        required: true
+
+  jobs:
+    build-push:
+      runs-on: ubuntu-latest
+      outputs:
+      image-name: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+      tag-version: ${{ steps.tag-dry-run.outputs.new_tag }}
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Login to Amazon ECR
+          id: login-ecr
+          uses: aws-actions/amazon-ecr-login@v2
+
+        - name: Semver
+          id: tag-dry-run
+          uses: anothrNick/github-tag-action@1.70.0
+          env:
+            DEFAULT_BRANCH: main
+            WITH_V: false
+            DRY_RUN: true
+
+        - name: echo new tag  
+          run: |
+            echo "The next tag version will be: ${{ steps.tag-dry-run.outputs.new_tag }}"
+
+   #    - name: Build and push image
+   #       id: build
+   #       uses: docker/build-push-action@v2
+   #       with:
+   #         context: .
+   #         file: ./Dockerfile
+   #         push: true
+   #         tags: |
+   #           ${{ github.ref_name }}:latest
+   #           ${{ github.ref_name }}-${{ inputs.env }}:latest
+   #     - name: Tag image
+    #      run: |
+    #        docker tag ${{ steps.build.outputs.tags }} ${{ secrets.DOCKER_USERNAME }}/tag-release-image:${{ inputs.env }}
+     #   - name: Push image
+     #     run: |
+     #       docker push ${{ secrets.DOCKER_USERNAME }}/tag-release-image:${{ inputs.env }}

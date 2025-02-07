@@ -1,0 +1,42 @@
+# Default values for ves-developer-experience-dev.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+namespace: default
+labels:
+  app: ves-developer-experience
+web:
+  strategyType: RollingUpdate
+  maxSurge: 25%
+  maxUnavailable: 1
+  image: 
+    value: REPLACE_ME
+    tag: REPLACE_ME
+    pullPolicy: IfNotPresent
+  healthCheck:
+    path: /ves-developer-experience/health
+    port: 3000
+    initialDelaySeconds: 20
+    periodSeconds: 120
+    successThreshold: 1
+    failureThreshold: 4
+  portName: web
+  port: 3000
+  protocol: TCP
+# this will change for each environments value files
+db:
+  name: va_test_user_portal_staging
+  portName: database
+  port: 5432
+  protocol: TCP
+serviceAccount:
+  enabled: true
+  roleArn: to-be-created
+  name: ves-developer-experience-dev
+# secrets configuration
+# values for these will be pulled dynamically from vault once implemented
+secrets:
+  dbSecret:
+    - name: database_password
+    - name: postgres_password
+    - name: database_host
+    - name: database_user
