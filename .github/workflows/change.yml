@@ -90,5 +90,18 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$LATEST .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$LATEST
-          echo "::set-output name=tag-version::${{needs.build-push.outputs.tag-version}}"
+    
+    replace-value:
+      needs: [tag-image]
+      steps:  
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Replace values
+          uses: anothrNick/replace-values-action@v1.0.0
+          with:
+            file: 'values.yaml'
+            search: 'tag: REPLACE_ME'
+            replace: 'tag: ${{ needs.tag-image.outputs.tag-version }}'
+            env: ${{ inputs.env }}
 
