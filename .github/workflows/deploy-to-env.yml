@@ -29,6 +29,7 @@ on:
 
 jobs:
   echo:
+    if: ${{ github.event_name != 'schedule'}}
     runs-on: ubuntu-latest
     steps:
       - name: echo new tag
