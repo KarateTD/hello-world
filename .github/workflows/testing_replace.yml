@@ -2,7 +2,7 @@ name: cron-test
 
 on:
   schedule:
-    - cron: '55 11 * * *'
+    - cron: '57 11 * * *'
 
 jobs:
   test:
@@ -30,7 +30,7 @@ jobs:
           echo "::set-output name=version::${VERSION}"
   deploy-to-qa:
     needs: [prep]
-    uses: KarateTD/hello-world/.github/workflows/deploy-to-env.yml@feature/DevX218
+    uses: KarateTD/hello-world/.github/workflows/deploy-to-env.yml@main
     secrets: inherit
     with:
       env: 'qa'
