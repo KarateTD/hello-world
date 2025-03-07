@@ -48,7 +48,7 @@ jobs:
             VERSION=`git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | head -1 | awk '{print $2}'`
             DAYS=$((DAYS + 1))
           done
-          echo "::set-output name=version::${VERSION}"
+          echo "version=${VERSION}" >> $GITHUB_ENV
   deploy-to-qa:
     needs: [prep]
     uses: KarateTD/hello-world/.github/workflows/deploy-to-env.yml@main
