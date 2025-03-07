@@ -60,11 +60,11 @@ jobs:
             DAYS=$((DAYS + 1))
           done
           echo "version=$(echo $VERSION)" >> "$GITHUB_OUTPUT"
-  deploy-to-qa:
-    needs: [prep]
-    name: deploy to qa
-    uses: KarateTD/hello-world/.github/workflows/deploy-to-env.yml@main
-    secrets: inherit
-    with:
-      env: 'qa'
-      new_tag: '${{ needs.prep.outputs.version }}'
+      - name: deploy to qa
+        uses: KarateTD/hello-world/.github/workflows/deploy-to-env.yml@main
+        with:
+          secerts: inherit
+          env: 'qa'
+          new_tag: '${{ steps.set_version.outputs.version }}'
+
+

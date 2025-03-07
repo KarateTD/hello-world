@@ -33,5 +33,6 @@ jobs:
         run: |
           echo "The next tag version will be: ${{ github.event.inputs.new_tag }}"
           echo "The environment is: ${{ github.event.inputs.env }}"
+          echo "The secert is: ${{ secrets.AWS_ACCESS_KEY_ID }}"
 
  
