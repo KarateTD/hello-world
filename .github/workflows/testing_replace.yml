@@ -22,9 +22,8 @@ jobs:
           echo "${TAGDATE}"
           OUT=`git fetch --tags`
           echo "${OUT}"
-          TAGS=`git tag -l`
+          TAGS=`git tag -l sort=-creatordate`
           echo "${TAGS}"
-          git for-each-ref --sort=-creatordate
           echo "The version is: ${VERSION}"
           echo "The time is: $(date)"
   prep:
