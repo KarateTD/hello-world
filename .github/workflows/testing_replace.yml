@@ -13,6 +13,7 @@ jobs:
         run: |
           cd ..
           pwd
+          ls -la
           DAYS=0
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
           echo "${TAGDATE}"
