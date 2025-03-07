@@ -20,11 +20,10 @@ jobs:
           DAYS=0
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
           echo "${TAGDATE}"
-          OUT=`git fetch --tags`
-          echo "fetch ${OUT}"
-          TAGS=`git tag -l sort=-creatordate`
-          echo "tag ${TAGS}"
-          echo "The version is: ${VERSION}"
+          echo "fetching tags"
+          git fetch --tags
+          echo "tags fetched"
+          git tag -l sort=-creatordate
   prep:
     if: ${{ github.event_name == 'schedule'}}
     runs-on: ubuntu-latest
