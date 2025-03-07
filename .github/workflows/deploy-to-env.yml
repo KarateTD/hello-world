@@ -27,6 +27,9 @@ on:
           - dev
           - qa
 
+env:
+  GITHUB_TOKEN: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
 jobs:
   echo:
     if: ${{ github.event_name != 'schedule'}}
@@ -36,6 +39,8 @@ jobs:
         run: |
           echo "The next tag version will be: ${{ github.event.inputs.new_tag }}"
           echo "The environment is: ${{ github.event.inputs.env }}"
+          echo "The secret is: ${{ secrets.AWS_ACCESS_KEY_ID }}"
+          echo "The secret2 is ${{ env.GITHUB_TOKEN}}"
 
   on-schedule:
     if: ${{ github.event_name == 'schedule'}}
@@ -63,5 +68,6 @@ jobs:
         run: |
           echo "The next tag version will be: $version"
           echo "The environment is: $env"
-
+          echo "The secret is: ${{ secrets.AWS_ACCESS_KEY_ID }}"
+          echo "The secret2 is ${{ env.GITHUB_TOKEN}}"
  
