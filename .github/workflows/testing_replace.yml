@@ -60,20 +60,18 @@ jobs:
             DAYS=$((DAYS + 1))
           done
           echo "version=$(echo $VERSION)" >> "$GITHUB_OUTPUT"
-
-  deploy-to-qa:
-    runs-on: ubuntu-latest
+  print-output:
     needs: [prep]
+    runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: print
+      - name: Print Time
         run: |
           echo "The next tag version will be: ${{ needs.prep.outputs.version }}"
-      - name: Deploy to QA
-        uses: KarateTD/hello-world/.github/workflows/deploy-to-env.yml@main
-        with:
-          secerts: inherit
-          env: 'qa'
-          new_tag: '${{ needs.prep.outputs.version }}'
+  deploy-to-qa:
+    needs: [prep]
+    uses: KarateTD/hello-world/.github/workflows/deploy-to-env.yml@main
+    secrets: inherit
+    with:
+      env: 'qa'
+      new_tag: '${{ needs.prep.outputs.version }}'
 
