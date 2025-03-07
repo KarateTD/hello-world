@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Print Time
         run: |
-          cd ../..
+          cd ..
           pwd
           DAYS=0
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
