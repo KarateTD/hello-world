@@ -23,7 +23,7 @@ jobs:
           echo "fetching tags"
           git fetch --tags
           echo "tags fetched"
-          git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | tail -1
+          git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | head -1
   prep:
     if: ${{ github.event_name == 'schedule'}}
     runs-on: ubuntu-latest
