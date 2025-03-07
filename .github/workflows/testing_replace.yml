@@ -10,7 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Time
-        run: date
+        run: |
+          TAGDATE -d '-$DAYS days' +%Y-%m-%d'
+          echo "${TAGDATE}"
+          echo "The time is: $(date)"
   prep:
     if: ${{ github.event_name == 'schedule'}}
     runs-on: ubuntu-latest
