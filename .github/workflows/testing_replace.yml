@@ -23,7 +23,8 @@ jobs:
           echo "fetching tags"
           git fetch --tags
           echo "tags fetched"
-          git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | head -1 | awk '{print $2}'
+          VERSION=`git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | head -1 | awk '{print $2}'`
+          echo "vesion is ${VERSION}"
   prep:
     if: ${{ github.event_name == 'schedule'}}
     runs-on: ubuntu-latest
