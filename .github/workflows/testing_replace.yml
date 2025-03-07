@@ -2,7 +2,7 @@ name: replace-only
 
 on:
   schedule:
-    - cron: '45 11 * * *'
+    - cron: '50 11 * * *'
 
 jobs:
   prep:
