@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Print Time
         run: |
-          DAYS=3
-          TAGDATE=`date -d '-$DAYS days' '+%Y-%m-%d'`
+          DAYS=-3
+          TAGDATE=`date -d '$(DAYS) days' '+%Y-%m-%d'`
           echo "${TAGDATE}"
           echo "The time is: $(date)"
   prep:
