@@ -2,7 +2,7 @@ name: replace-only
 
 on:
   schedule:
-    - cron: '40 11 * * *'
+    - cron: '45 11 * * *'
 
 jobs:
   prep:
@@ -25,7 +25,7 @@ jobs:
           echo "::set-output name=version::${VERSION}"
   deploy-to-qa:
     needs: [prep]
-    uses: .github/workflows/deploy-to-env.yml@feature/DevX218
+    uses: KarateTD/hello-world/.github/workflows/deploy-to-env.yml@feature/DevX218
     secrets: inherit
     with:
       env: 'qa'
