@@ -17,14 +17,14 @@ jobs:
         run: |
           pwd
           ls -la
-          DAYS=3
+          DAYS=0
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
           echo "${TAGDATE}"
           OUT=`git fetch --tags`
           echo "${OUT}"
           TAGS=`git tag -l`
           echo "${TAGS}"
-          git tag --format='%(creatordate:short)%09%(refname:strip=2)' --sort=committerdate
+          git for-each-ref --sort=-creatordate
           echo "The version is: ${VERSION}"
           echo "The time is: $(date)"
   prep:
