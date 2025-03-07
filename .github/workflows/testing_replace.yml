@@ -19,6 +19,7 @@ jobs:
           ls -la
           DAYS=0
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
+          git fetch --tags
           VERSION=`git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | head -1 | awk '{print $2}'`
           echo "vesion is ${VERSION}"
   prep:
