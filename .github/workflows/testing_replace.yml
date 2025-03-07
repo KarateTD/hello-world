@@ -14,6 +14,8 @@ jobs:
           DAYS=3
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
           echo "${TAGDATE}"
+          VERSION=`git tag --format='%(creatordate:short)%09%(refname:strip=2)' --sort=committerdate | grep ${TAGDATE} | tail -1 | awk '{print $2}'`
+          echo "The version is: ${VERSION}"
           echo "The time is: $(date)"
   prep:
     if: ${{ github.event_name == 'schedule'}}
