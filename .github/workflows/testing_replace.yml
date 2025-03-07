@@ -10,18 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
       - name: Print Time
         run: |
           pwd
           ls -la
-          DAYS=0
+          DAYS=3
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
           echo "${TAGDATE}"
-          OUT=`git tag`
+          OUT=`git fetch tags`
           echo "${OUT}"
+          TAGS=`git tag -l`
+          echo "${TAGS}"
           git tag --format='%(creatordate:short)%09%(refname:strip=2)' --sort=committerdate
           echo "The version is: ${VERSION}"
           echo "The time is: $(date)"
