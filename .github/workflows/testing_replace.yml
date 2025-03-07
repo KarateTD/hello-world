@@ -1,0 +1,32 @@
+name: replace-only
+
+on:
+  schedule:
+    - cron: '40 11 * * *'
+
+jobs:
+  prep:
+    if: ${{ github.event_name == 'schedule'}}
+    runs-on: ubuntu-latest
+    name: Prep for Schedule
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+    steps:
+      - name: Sets the Tag
+        id: set_version
+        run: |
+          DAYS=3
+          VERSION=""
+          while [[ $VERSION = "" ]]; do
+            TAGDATE=`date -jf %s $(( $(date +%s) - 86400 * $DAYS )) +%Y-%m-%d`
+            VERSION=`git tag --format='%(creatordate:short)%09%(refname:strip=2)' --sort=committerdate | grep $TAGDATE | tail -1 | awk '{print $2}'`
+            DAYS=$((DAYS + 1))
+          done
+          echo "::set-output name=version::${VERSION}"
+  deploy-to-qa:
+    needs: [prep]
+    uses: .github/workflows/deploy-to-env.yml@feature/DevX218
+    secrets: inherit
+    with:
+      env: 'qa'
+      new_tag: '${{ needs.prep.outputs.version }}'
