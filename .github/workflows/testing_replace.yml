@@ -20,7 +20,7 @@ jobs:
           DAYS=0
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
           echo "${TAGDATE}"
-          VERSION=`git tag --format='%(creatordate:short)%09%(refname:strip=2)' --sort=committerdate | grep ${TAGDATE} | tail -1`
+          VERSION=`git tag --format='%(creatordate:short)%09%(refname:strip=2)' --sort=committerdate`
           echo "The version is: ${VERSION}"
           echo "The time is: $(date)"
   prep:
