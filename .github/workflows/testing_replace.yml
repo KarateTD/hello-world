@@ -27,7 +27,7 @@ jobs:
           DAYS=3
           VERSION=""
           while [[ $VERSION = "" ]]; do
-            TAGDATE=`date -d '-$DAYS days' +%Y-%m-%d'`
+            TAGDATE=`date -d '-$DAYS days' '+%Y-%m-%d'`
             VERSION=`git tag --format='%(creatordate:short)%09%(refname:strip=2)' --sort=committerdate | grep $TAGDATE | tail -1 | awk '{print $2}'`
             DAYS=$((DAYS + 1))
           done
