@@ -33,14 +33,19 @@ jobs:
     outputs:
       version: ${{ steps.set_version.outputs.version }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - name: Sets the Tag
         id: set_version
         run: |
           DAYS=3
           VERSION=""
           while [[ $VERSION = "" ]]; do
-            TAGDATE=`date -d '-$DAYS days' '+%Y-%m-%d'`
-            VERSION=`git tag --format='%(creatordate:short)%09%(refname:strip=2)' --sort=committerdate | grep $TAGDATE | tail -1 | awk '{print $2}'`
+            TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
+            git fetch --tags
+            VERSION=`git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | head -1 | awk '{print $2}'`
             DAYS=$((DAYS + 1))
           done
           echo "::set-output name=version::${VERSION}"
