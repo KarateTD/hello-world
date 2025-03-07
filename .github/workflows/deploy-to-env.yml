@@ -1,6 +1,8 @@
 name: deploy-release-to-env
 
 on:
+  schedule:
+    - cron: '0/5 0 * * *'
   workflow_call:
     inputs:
       new_tag:
@@ -33,6 +35,33 @@ jobs:
         run: |
           echo "The next tag version will be: ${{ github.event.inputs.new_tag }}"
           echo "The environment is: ${{ github.event.inputs.env }}"
-          echo "The secert is: ${{ secrets.AWS_ACCESS_KEY_ID }}"
+
+  on-schedule:
+    if: ${{ github.event_name == 'schedule'}}
+    runs-on: ubuntu-latest
+    name: Prep for Schedule
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Sets the Tag
+        id: set_version
+        run: |
+          DAYS=-3
+          VERSION=""
+          while [[ $VERSION = "" ]]; do
+            TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
+            git fetch --tags
+            VERSION=`git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | head -1 | awk '{print $2}'`
+            DAYS=$((DAYS + 1))
+          done
+          echo "version=$(echo $VERSION)" >> "$GITHUB_OUTPUT"
+      - name: Print Time
+        run: |
+          echo "The next tag version will be: ${{ steps.set_version.outputs.version }}"
+          echo "The environment is: qa"
 
  
