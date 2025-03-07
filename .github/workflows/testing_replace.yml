@@ -20,7 +20,7 @@ jobs:
           DAYS=3
           TAGDATE=`date --date="${DAYS} days ago" +"%Y-%m-%d"`
           echo "${TAGDATE}"
-          OUT=`git fetch tags`
+          OUT=`git fetch --tags`
           echo "${OUT}"
           TAGS=`git tag -l`
           echo "${TAGS}"
