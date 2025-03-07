@@ -40,8 +40,6 @@ jobs:
     if: ${{ github.event_name == 'schedule'}}
     runs-on: ubuntu-latest
     name: Prep for Schedule
-    outputs:
-      version: ${{ steps.set_version.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -58,10 +56,11 @@ jobs:
             VERSION=`git tag -l --sort=-creatordate --format '%(creatordate:short)%09%(refname:strip=2)' | grep ${TAGDATE} | head -1 | awk '{print $2}'`
             DAYS=$((DAYS + 1))
           done
-          echo "version=$(echo $VERSION)" >> "$GITHUB_OUTPUT"
+          echo "version=$(echo $VERSION)" >> "$GITHUB_ENV"
+          echo "env=$(echo qa)" >> "$GITHUB_ENV"
       - name: Print Time
         run: |
-          echo "The next tag version will be: ${{ steps.set_version.outputs.version }}"
-          echo "The environment is: qa"
+          echo "The next tag version will be: $version"
+          echo "The environment is: $env"
 
  
