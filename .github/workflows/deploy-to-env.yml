@@ -2,7 +2,7 @@ name: deploy-release-to-env
 
 on:
   schedule:
-    - cron: '0/5 0 * * *'
+    - cron: '0/5 * * * *'
   workflow_call:
     inputs:
       new_tag:
