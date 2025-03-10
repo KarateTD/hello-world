@@ -71,9 +71,7 @@ jobs:
           echo "The secret is: ${{ secrets.AWS_ACCESS_KEY_ID }}"
           echo "The secret2 is ${{ env.GITHUB_TOKEN}}"
       - name: Update ves-developer-experience in infra repo
-        run: |
-          pwd
-          ls -la
+        run: | 
           cd deploy/ves-developer-experience
           yq e -i '(.web.image.tag) |= "${{ env.version }}"' $env.yaml
           git diff
