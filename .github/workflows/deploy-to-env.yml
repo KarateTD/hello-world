@@ -73,7 +73,8 @@ jobs:
       - name: Update ves-developer-experience in infra repo
         run: |
           pwd
+          ls -la
           cd deploy/ves-developer-experience
-          yq e -i '(.web.image.tag) |= \"$version\"' $env.yaml
+          yq e -i '(.web.image.tag) |= "$version"' $env.yaml
           git diff
  
