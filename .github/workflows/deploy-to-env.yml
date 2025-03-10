@@ -78,5 +78,6 @@ jobs:
           echo "version is $version"
           echo "env is $env"
           yq e -i '(.web.image.tag) |= $version' $env.yaml
+          cat $env.yaml
           git diff
  
