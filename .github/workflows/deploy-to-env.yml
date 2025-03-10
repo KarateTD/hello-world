@@ -77,7 +77,7 @@ jobs:
           cd deploy/ves-developer-experience
           echo "version is $version"
           echo "env is $env"
-          yq e -i '(.web.image.tag) |= "$env.version"' $env.yaml
+          yq e -i '(.web.image.tag) |= "${{ env.version }}"' $env.yaml
           cat $env.yaml
           git diff
  
