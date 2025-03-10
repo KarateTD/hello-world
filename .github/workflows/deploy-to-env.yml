@@ -74,6 +74,6 @@ jobs:
         run: |
           pwd
           cd deploy/ves-developer-experience
-          yq e -i '(.web.image.tag) |= "${{ inputs.new_tag }}"' ${{ inputs.env }}.yaml
+          yq e -i '(.web.image.tag) |= \"$version\"' $env.yaml
           git diff
  
